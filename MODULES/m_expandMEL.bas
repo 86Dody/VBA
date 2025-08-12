@@ -18,21 +18,46 @@ If Sheets("MEL").Buttons("button 39").Enabled = True And access < 3 And Workshee
     
     Dim tbl As ListObject
     Set tbl = ws.ListObjects("MEL_LST")
+    Dim insertPos As Long
+    Dim userChoice As VbMsgBoxResult
 
-    tbl.ListRows.Add
-    
-    Sheets("MEL").Cells(Range("MEL_ROWS").Value + 6, Range("MEL_LST[[#Headers],[NUMBER]]").Column).Value = Range("MEL_ROWS").Value
-    
-    If Sheets("MEL").Range("Version").Value = "START" Then
-    
-        Sheets("MEL").Cells(Range("MEL_LST").Rows.Count + 6, Range("MEL_LST[[#Headers],[REV]]").Column).Value = "A"
-    
+    If Not Intersect(Selection, tbl.DataBodyRange) Is Nothing Then
+        userChoice = MsgBox("Add a new line above the selected row? Click No to add at the end.", vbYesNo)
+        If userChoice = vbYes Then
+            insertPos = Selection.Row - tbl.HeaderRowRange.Row
+            tbl.ListRows.Add Position:=insertPos
+            Range("MEL_ROWS").Value = insertPos
+        Else
+            tbl.ListRows.Add
+            Range("MEL_ROWS").Value = tbl.ListRows.Count
+        End If
     Else
-    
-        Sheets("MEL").Cells(Range("MEL_ROWS").Value + 6, Range("MEL_LST[[#Headers],[REV]]").Column).Value = Sheets("MEL").Range("VERSION").Value
-    
+        userChoice = MsgBox("Add a new line at the end of the table?", vbYesNo)
+        If userChoice = vbNo Then
+            Sheets("MEL").Protect Password:=pswd, DrawingObjects:=True, Contents:=True, Scenarios:=True, AllowFiltering:=True, Userinterfaceonly:=True, AllowFormattingColumns:=True, AllowInsertingRows:=True, AllowDeletingRows:=True
+            Application.EnableEvents = True
+            Application.ScreenUpdating = True
+            Set ws = Nothing
+            Set tbl = Nothing
+            Set network = Nothing
+            Exit Sub
+        End If
+        tbl.ListRows.Add
+        Range("MEL_ROWS").Value = tbl.ListRows.Count
     End If
-    
+
+    Sheets("MEL").Cells(Range("MEL_ROWS").Value + 6, Range("MEL_LST[[#Headers],[NUMBER]]").Column).Value = Range("MEL_ROWS").Value
+
+    If Sheets("MEL").Range("Version").Value = "START" Then
+
+        Sheets("MEL").Cells(Range("MEL_ROWS").Value + 6, Range("MEL_LST[[#Headers],[REV]]").Column).Value = "A"
+
+    Else
+
+        Sheets("MEL").Cells(Range("MEL_ROWS").Value + 6, Range("MEL_LST[[#Headers],[REV]]").Column).Value = Sheets("MEL").Range("VERSION").Value
+
+    End If
+
     Sheets("MEL").Cells(Range("MEL_ROWS").Value + 6, Range("MEL_LST[[#Headers],[DATE]]").Column).Value = Format(Date, "yyyy/mm/dd")
     Sheets("MEL").Cells(Range("MEL_ROWS").Value + 6, Range("MEL_LST[[#Headers],[CONTROL]]").Column).Value = network.UserName
     
@@ -46,7 +71,7 @@ If Sheets("MEL").Buttons("button 39").Enabled = True And access < 3 And Workshee
         Sheets("MEL").Protect Password:=pswd, DrawingObjects:=True, Contents:=True, Scenarios:=True, AllowFiltering:=True, Userinterfaceonly:=True, AllowFormattingColumns:=True, AllowInsertingRows:=True, AllowDeletingRows:=True
     End If
     
-    Sheets("MEL").Range("MEL_LST[[#Headers],[NUMBER]]").End(xlDown).Select
+    Sheets("MEL").Cells(Range("MEL_ROWS").Value + 6, Range("MEL_LST[[#Headers],[NUMBER]]").Column).Select
         
     Application.ScreenUpdating = True
     Application.EnableEvents = True
