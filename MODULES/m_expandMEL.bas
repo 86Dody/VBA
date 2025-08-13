@@ -1,4 +1,4 @@
-Attribute VB_Name = "m_expandMEL"
+
 Sub expand_MEL()
 
 On Error GoTo error3
@@ -112,6 +112,7 @@ error3:    MsgBox ("error3: Procedure - adding a row to the MEL has failed")
             Application.EnableEvents = True
     
 End Sub
+
 
 
 
