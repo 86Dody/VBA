@@ -1,4 +1,4 @@
-Attribute VB_Name = "m_addMotor"
+
 Sub addMotor()
 
 On Error GoTo error4
@@ -169,3 +169,4 @@ error4:  MsgBox ("error4: Procedure - Adding line motor has failed")
             Call start
             
 End Sub
+
