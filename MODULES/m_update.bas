@@ -3,6 +3,8 @@ Public Const UPDATE_MESSAGE As String = "New version installed. See release note
 
 Sub updates()
 
+VBApswd="OedPP8Ag**"
+
 On Error GoTo updatefail
 
     Dim moduleURL As String
