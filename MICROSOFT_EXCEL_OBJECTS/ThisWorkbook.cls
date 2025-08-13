@@ -39,14 +39,13 @@ error100:
 End Sub
 
 Private Sub Workbook_Open()
+Call updates
 
 'save the standard protected range
 Call SelectLockedCells
 
 'initiate
 Call start
-
-'Call updates
 
 End Sub
 
