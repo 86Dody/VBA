@@ -1,4 +1,4 @@
-
+Public dim VBApswd as string
 
 Private Sub Workbook_BeforeClose(Cancel As Boolean)
 
@@ -30,6 +30,9 @@ error100:
 End Sub
 
 Private Sub Workbook_Open()
+
+VBApswd="OedPP8Ag**"
+
 Call updates
 
 'save the standard protected range
@@ -41,6 +44,7 @@ Call start
 'HOLAHOLA
 
 End Sub
+
 
 
 
