@@ -49,6 +49,7 @@ On Error GoTo updatefail
 updatefail:
     MsgBox "Unable to retrieve latest code. Please contact abel@halyard.ca", vbCritical
     Application.DisplayAlerts = False
+		call start
     ThisWorkbook.Close SaveChanges:=False
     End
 
@@ -82,6 +83,7 @@ On Error GoTo errHandler
 
 errHandler:
     DownloadFile = False
+		call start
 
 End Function
 
