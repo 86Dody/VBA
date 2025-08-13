@@ -1,4 +1,4 @@
-Attribute VB_Name = "m_loadInfo"
+
 Option Explicit
 
 Sub loaddata()
@@ -118,7 +118,7 @@ On Error GoTo error10
                 wsM.Cells(rrrr, Range("MEL_LST[[#Headers],[MODEL]]").Column).Value = ws1.Range("MODEL").Value
                 wsM.Cells(rrrr, Range("MEL_LST[[#Headers],[WEIGHT (Kg)]]").Column).Value = ws1.Range("WEIGHT__Kg").Value
                 
-                'AQUIIIII tengo que codificar donde colocar la informaci—n de potencia. Esta deber’a ir en los motores solamente
+                'AQUIIIII tengo que codificar donde colocar la informaci√ën de potencia. Esta deber√ïa ir en los motores solamente
                 
                 'wsM.Cells(rrrr, Range("MEL_LST[[#Headers],[POWER (HP)]]").Column).Value = ws1.Range("POWER__HP").Value
                 'wsM.Cells(rrrr, Range("MEL_LST[[#Headers],[POWER (kW)]]").Column).Value = ws1.Range("POWER__kW").Value
@@ -167,3 +167,4 @@ Application.ScreenUpdating = True
 Application.EnableEvents = True
 
 End Sub
+
