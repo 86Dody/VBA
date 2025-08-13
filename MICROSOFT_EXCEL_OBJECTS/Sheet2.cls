@@ -525,11 +525,11 @@ Set tbl = ws.ListObjects("MEL_LST")
 
 
 'AQUI codigo para controlar el cambio de tipo.
-'Reflexionar sobre los cambios que se pueden producir y afectar a valores que no estar‡n controlados por formulas.
+'Reflexionar sobre los cambios que se pueden producir y afectar a valores que no estar√†n controlados por formulas.
 'es posible que se requira un reseteo de las formulas
 
-'AQUI Cambio de typo solo ser‡ posible en modo START.
-'Modificaciones adicionales solo podr‡n realizarse eliminando elementos y a–adiendolos al final.
+'AQUI Cambio de typo solo ser√† posible en modo START.
+'Modificaciones adicionales solo podr√†n realizarse eliminando elementos y a√êadiendolos al final.
 
         
         
