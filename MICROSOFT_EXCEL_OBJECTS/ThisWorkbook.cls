@@ -29,8 +29,6 @@ End Sub
 
 Private Sub Workbook_Open()
 
-VBApswd="OedPP8Ag**"
-
 Call updates
 
 'save the standard protected range
@@ -42,6 +40,7 @@ Call start
 'HOLAHOLA
 
 End Sub
+
 
 
 
