@@ -7,7 +7,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
-
+Option Explicit
 
 Private Sub Workbook_BeforeClose(Cancel As Boolean)
 
@@ -39,14 +39,13 @@ error100:
 End Sub
 
 Private Sub Workbook_Open()
+Call updates
 
 'save the standard protected range
 Call SelectLockedCells
 
 'initiate
 Call start
-
-'Call updates
 
 End Sub
 
