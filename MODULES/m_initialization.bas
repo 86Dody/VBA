@@ -4,7 +4,7 @@
 Global pswd As String
 Global access As Integer
 Global secure As Range
-Global dim VBApswd as string
+
 
 
 Sub start()
@@ -306,6 +306,7 @@ error101:
         Call start
 
 End Sub
+
 
 
 
