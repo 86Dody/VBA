@@ -1,4 +1,4 @@
-Attribute VB_Name = "m_reorder"
+
 Sub reorder()
 
 'this function is not being used
@@ -51,4 +51,5 @@ error25:     MsgBox ("error25: Procedure - sorted item in table has failed")
         Call start
 
 End Sub
+
 
