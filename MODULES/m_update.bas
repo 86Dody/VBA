@@ -1,5 +1,4 @@
 Public Const UPDATE_MESSAGE As String = "New version installed. See release notes for details."
-Public VBApswd As String
 
 Sub updates()
 On Error GoTo updatefail
