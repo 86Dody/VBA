@@ -1,7 +1,4 @@
-VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
+
 Attribute VB_Name = "Sheet2"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
@@ -699,5 +696,6 @@ error40: MsgBox ("error40: Procedure - change STEP STATUS has failed")
         Call start
 
 End Sub
+
 
 
