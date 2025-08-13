@@ -1,3 +1,4 @@
+Option explicit
 Global dim VBApswd as string
 
 Private Sub Workbook_BeforeClose(Cancel As Boolean)
