@@ -1,4 +1,4 @@
-Attribute VB_Name = "m_Block"
+
 Sub cellBlock()
 
 On Error GoTo error9
@@ -30,3 +30,4 @@ Exit Sub
 error9: MsgBox ("error9: Procedure - blocking TYPE has failed")
 
 End Sub
+
