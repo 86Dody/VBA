@@ -9,6 +9,7 @@ On Error GoTo updatefail
     Dim vbComp As Object
     Dim tmpFile As String
     Dim fileURL As String
+    Dim compName As String
 
     moduleURL = "https://halyardinc-my.sharepoint.com/:f:/r/personal/abel_halyard_ca/Documents/Documents/Abel/Programing/GitHub/VBA/MODULES/"
     objectURL = "https://halyardinc-my.sharepoint.com/:f:/r/personal/abel_halyard_ca/Documents/Documents/Abel/Programing/GitHub/VBA/MICROSOFT_EXCEL_OBJECTS/"
@@ -22,11 +23,13 @@ On Error GoTo updatefail
         Select Case vbComp.Type
             Case 1
                 If vbComp.Name <> "m_update" Then
-                    fileURL = moduleURL & vbComp.Name & ".bas"
-                    tmpFile = tempFolder & vbComp.Name & ".bas"
+                    compName = vbComp.Name
+                    fileURL = moduleURL & compName & ".bas"
+                    tmpFile = tempFolder & compName & ".bas"
                     If DownloadFile(fileURL, tmpFile) Then
                         ThisWorkbook.VBProject.VBComponents.Remove vbComp
-                        ThisWorkbook.VBProject.VBComponents.Import tmpFile
+                        Set vbComp = ThisWorkbook.VBProject.VBComponents.Import(tmpFile)
+                        vbComp.Name = compName
                     Else
                         GoTo updatefail
                     End If
@@ -35,7 +38,9 @@ On Error GoTo updatefail
                 fileURL = objectURL & vbComp.Name & ".cls"
                 tmpFile = tempFolder & vbComp.Name & ".cls"
                 If DownloadFile(fileURL, tmpFile) Then
-                    vbComp.CodeModule.DeleteLines 1, vbComp.CodeModule.CountOfLines
+                    If vbComp.CodeModule.CountOfLines > 0 Then
+                        vbComp.CodeModule.DeleteLines 1, vbComp.CodeModule.CountOfLines
+                    End If
                     vbComp.CodeModule.AddFromFile tmpFile
                 Else
                     GoTo updatefail
