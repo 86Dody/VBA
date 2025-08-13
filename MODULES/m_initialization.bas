@@ -1,4 +1,4 @@
-Attribute VB_Name = "m_initialization"
+
 
 'define all public variables
 Global pswd As String
@@ -211,7 +211,7 @@ On Error GoTo error102
             Case "NORMAL"
                 ' Do nothing
             Case Else
-                ' Unknown status — optionally handle
+                ' Unknown status â€” optionally handle
         End Select
         
         'color formatting
@@ -305,4 +305,5 @@ error101:
         Call start
 
 End Sub
+
 
