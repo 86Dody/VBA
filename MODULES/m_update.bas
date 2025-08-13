@@ -1,4 +1,4 @@
-Global dim VBApswd as string
+Global VBApswd as string
 Public Const UPDATE_MESSAGE As String = "New version installed. See release notes for details."
 
 Sub updates()
