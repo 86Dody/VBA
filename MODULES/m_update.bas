@@ -1,4 +1,5 @@
 Public Const UPDATE_MESSAGE As String = "New version installed. See release notes for details."
+Public VBApswd As String
 
 Sub updates()
 On Error GoTo updatefail
@@ -17,6 +18,8 @@ On Error GoTo updatefail
     tempFolder = Environ("TEMP") & "\"
 
     changeMade = False
+
+    UnlockVBProject VBApswd
 
     For Each vbComp In ThisWorkbook.VBProject.VBComponents
 
@@ -71,6 +74,19 @@ updatefail:
     ThisWorkbook.Close SaveChanges:=False
     End
 
+End Sub
+
+Private Sub UnlockVBProject(ByVal password As String)
+    Dim vbp As Object
+    Set vbp = ThisWorkbook.VBProject
+
+    If vbp.Protection <> 0 Then
+        Application.VBE.MainWindow.Visible = True
+        vbp.VBE.CommandBars("Menu Bar").Controls("Tools").Controls("VBAProject Properties...").Execute
+        Application.SendKeys password & "{ENTER}", True
+        DoEvents
+        Application.VBE.MainWindow.Visible = False
+    End If
 End Sub
 
 Private Function DownloadFile(ByVal url As String, ByVal dest As String) As Boolean
