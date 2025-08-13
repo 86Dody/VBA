@@ -40,8 +40,19 @@ Sub updates()
     Print #fnum, script
     Close #fnum
 
-    Shell "wscript """ & scriptPath & """", vbHide
+    If Dir(scriptPath) = "" Then
+        MsgBox "Update script was not created: " & scriptPath, vbExclamation
+        Exit Sub
+    End If
+
+    On Error GoTo ShellError
+    Shell """" & Environ("WINDIR") & "\System32\wscript.exe"" """" & scriptPath & """"", vbHide
+    On Error GoTo 0
     ThisWorkbook.Close SaveChanges:=False
+    Exit Sub
+
+ShellError:
+    MsgBox "Failed to run update script: " & Err.Description, vbCritical
 
 End Sub
 
