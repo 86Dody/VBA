@@ -15,19 +15,22 @@ On Error Resume Next
 Set xl = CreateObject("Excel.Application")
 If Err.Number <> 0 Then
   WScript.Echo "Could not start Excel: " & Err.Description
-  GoTo CleanUp
+  CleanUp
+  WScript.Quit 1
 End If
 xl.Visible = False
 xl.AutomationSecurity = 3
 Set wb = xl.Workbooks.Open(wbPath)
 If Err.Number <> 0 Then
   WScript.Echo "Could not open workbook: " & Err.Description
-  GoTo CleanUp
+  CleanUp
+  WScript.Quit 1
 End If
 Set vbp = wb.VBProject
 If Err.Number <> 0 Then
   WScript.Echo "Could not access VBProject: " & Err.Description
-  GoTo CleanUp
+  CleanUp
+  WScript.Quit 1
 End If
 If vbp.Protection <> 0 Then
   xl.VBE.MainWindow.Visible = True
@@ -65,11 +68,13 @@ For Each vbComp In wb.VBProject.VBComponents
   End Select
 Next
 wb.Save
-
-CleanUp:
-If Not wb Is Nothing Then wb.Close False
-If Not xl Is Nothing Then xl.Quit
+CleanUp
 If Err.Number <> 0 Then WScript.Quit 1
+
+Sub CleanUp()
+  If Not wb Is Nothing Then wb.Close False
+  If Not xl Is Nothing Then xl.Quit
+End Sub
 
 Function DownloadFile(url,dest)
   On Error Resume Next
