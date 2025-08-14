@@ -51,6 +51,8 @@ Private Sub Workbook_Open()
     Call SelectLockedCells
     Call start
 
+'HOLA
+
 End Sub
 
 

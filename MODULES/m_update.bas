@@ -1,5 +1,5 @@
 Public Const UPDATE_MESSAGE As String = "New version installed. See release notes for details."
-Public Const LATEST_VERSION As Long = 1
+Public Const LATEST_VERSION As Long = 
 Public VBApswd As String
 
 ' Launch an external VBScript that updates the VBA project while Excel is closed.
@@ -9,7 +9,7 @@ Sub updates()
     updating = True
 
     Dim scriptPath As String
-    scriptPath = ThisWorkbook.Path & "\vba_update.vbs"
+    scriptPath = "C:\Users\Abel\OneDrive - Halyard Inc\Documents\Abel\Programing\GitHub\VBA\vba_update.vbs"
 
     If Dir(scriptPath) = "" Then
         MsgBox "Update script not found: " & scriptPath, vbExclamation
