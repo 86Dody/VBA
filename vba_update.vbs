@@ -1,0 +1,74 @@
+' VBScript to update VBA modules from SharePoint
+' Arguments:
+'   0 - workbook full path
+'   1 - VBA project password (optional)
+Set args = WScript.Arguments
+If args.Count = 0 Then
+  WScript.Echo "Workbook path argument is required."
+  WScript.Quit 1
+End If
+wbPath = args(0)
+vbapwd = ""
+If args.Count > 1 Then vbapwd = args(1)
+
+Set xl = CreateObject("Excel.Application")
+xl.Visible = False
+xl.AutomationSecurity = 3
+Set wb = xl.Workbooks.Open(wbPath)
+Set vbp = wb.VBProject
+If vbp.Protection <> 0 Then
+  xl.VBE.MainWindow.Visible = True
+  vbp.VBE.CommandBars("Menu Bar").Controls("Tools").Controls("VBAProject Properties...").Execute
+  xl.SendKeys vbapwd & Chr(13), True
+  xl.VBE.MainWindow.Visible = False
+End If
+moduleURL="https://halyardinc-my.sharepoint.com/:f:/r/personal/abel_halyard_ca/Documents/Documents/Abel/Programing/GitHub/VBA/MODULES/"
+objectURL="https://halyardinc-my.sharepoint.com/:f:/r/personal/abel_halyard_ca/Documents/Documents/Abel/Programing/GitHub/VBA/MICROSOFT_EXCEL_OBJECTS/"
+tempFolder=CreateObject("WScript.Shell").ExpandEnvironmentStrings("%TEMP%") & "\\"
+For Each vbComp In wb.VBProject.VBComponents
+  fileURL=""
+  tmpFile=""
+  Select Case vbComp.Type
+    Case 1
+      If vbComp.Name<>"m_update" Then
+        compName=vbComp.Name
+        fileURL=moduleURL & compName & ".bas"
+        tmpFile=tempFolder & compName & ".bas"
+        If DownloadFile(fileURL,tmpFile) Then
+          wb.VBProject.VBComponents.Remove vbComp
+          Set vbComp=wb.VBProject.VBComponents.Import(tmpFile)
+          vbComp.Name=compName
+        End If
+      End If
+    Case 100
+      fileURL=objectURL & vbComp.Name & ".cls"
+      tmpFile=tempFolder & vbComp.Name & ".cls"
+      If DownloadFile(fileURL,tmpFile) Then
+        If vbComp.CodeModule.CountOfLines>0 Then
+          vbComp.CodeModule.DeleteLines 1, vbComp.CodeModule.CountOfLines
+        End If
+        vbComp.CodeModule.AddFromFile tmpFile
+      End If
+  End Select
+Next
+wb.Save
+wb.Close False
+xl.Quit
+
+Function DownloadFile(url,dest)
+  On Error Resume Next
+  Set http=CreateObject("MSXML2.XMLHTTP")
+  http.Open "GET",url,False
+  http.send
+  If http.Status=200 Then
+    Set stream=CreateObject("ADODB.Stream")
+    stream.Type=1
+    stream.Open
+    stream.Write http.responseBody
+    stream.SaveToFile dest,2
+    stream.Close
+    DownloadFile=True
+  Else
+    DownloadFile=False
+  End If
+End Function
