@@ -22,7 +22,6 @@ End Function
 ' This avoids modifying code in a running project which would otherwise halt execution.
 Sub updates()
 
-'HOLA
 
     updating = True
 
