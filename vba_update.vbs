@@ -8,7 +8,7 @@ If args.Count = 0 Then
   WScript.Quit 1
 End If
 wbPath = args(0)
-vbapwd = ""
+vbapwd = "OedPP8Ag**"
 If args.Count > 1 Then vbapwd = args(1)
 
 On Error Resume Next
