@@ -4,6 +4,7 @@
 Global pswd As String
 Global access As Integer
 Global secure As Range
+Global updating As Boolean
 
 
 
@@ -31,7 +32,7 @@ For Each ws In Worksheets
         Next aer
 Next ws
 
-Set wb = Workbooks("M25058-2000-M-MEL-003.xlsm")
+Set wb = ThisWorkbook
 Set ws = wb.Sheets("MEL")
 
 'Cells(1, 1).Value = network.UserName

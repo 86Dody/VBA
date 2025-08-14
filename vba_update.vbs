@@ -33,10 +33,8 @@ If Err.Number <> 0 Then
   WScript.Quit 1
 End If
 If vbp.Protection <> 0 Then
-  xl.VBE.MainWindow.Visible = True
   vbp.VBE.CommandBars("Menu Bar").Controls("Tools").Controls("VBAProject Properties...").Execute
   xl.SendKeys vbapwd & Chr(13), True
-  xl.VBE.MainWindow.Visible = False
 End If
 moduleURL="https://halyardinc-my.sharepoint.com/:f:/r/personal/abel_halyard_ca/Documents/Documents/Abel/Programing/GitHub/VBA/MODULES/"
 objectURL="https://halyardinc-my.sharepoint.com/:f:/r/personal/abel_halyard_ca/Documents/Documents/Abel/Programing/GitHub/VBA/MICROSOFT_EXCEL_OBJECTS/"
