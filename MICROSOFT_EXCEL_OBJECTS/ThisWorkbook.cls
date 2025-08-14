@@ -2,6 +2,9 @@ Private Sub Workbook_BeforeClose(Cancel As Boolean)
 
 On Error GoTo error100
 
+    If updating Then Exit Sub
+    If pswd = "" Then pswd = "ConPdeProcess"
+
     Dim ws As Worksheet
     Set ws = ActiveSheet
 
@@ -28,16 +31,25 @@ error100:
 End Sub
 
 Private Sub Workbook_Open()
+    Dim versionName As Name
+    Dim version As Long
 
-Call updates
+    On Error Resume Next
+    Set versionName = ThisWorkbook.Names("VbaVersion")
+    If Not versionName Is Nothing Then
+        version = CLng(Mid(versionName.RefersTo, 2))
+    Else
+        version = 0
+    End If
+    On Error GoTo 0
 
-'save the standard protected range
-Call SelectLockedCells
+    If version <> LATEST_VERSION Then
+        updates
+        Exit Sub
+    End If
 
-'initiate
-Call start
-
-'HOLAHOLAHOLA
+    Call SelectLockedCells
+    Call start
 
 End Sub
 
