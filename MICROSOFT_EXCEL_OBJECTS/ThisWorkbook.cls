@@ -45,7 +45,9 @@ Private Sub Workbook_Open()
     End If
     On Error GoTo 0
 
-    If latestVersion > 0 And version <> latestVersion Then
+    If latestVersion > 0 And latestVersion > version Then
+        MsgBox "A new version (" & latestVersion & ") is available. " & _
+               "The workbook will close and reopen with the update.", vbInformation
         updates
         Exit Sub
     End If
