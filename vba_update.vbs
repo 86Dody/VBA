@@ -4,8 +4,6 @@ If args.Count = 0 Then
   WScript.Quit 1
 End If
 wbPath = args(0)
-vbapwd = "OedPP8Ag**"
-If args.Count > 1 Then vbapwd = args(1)
 On Error Resume Next
 Set xl = CreateObject("Excel.Application")
 If Err.Number <> 0 Then
@@ -26,17 +24,6 @@ If Err.Number <> 0 Then
   WScript.Echo "Could not access VBProject: " & Err.Description
   CleanUp
   WScript.Quit 1
-End If
-If vbp.Protection <> 0 Then
-  On Error Resume Next
-  vbp.RemovePassword vbapwd
-  'vbp.Unprotect vbapwd
-  If Err.Number <> 0 Then
-    WScript.Echo "Failed to unlock VBProject: " & Err.Description
-    CleanUp
-    WScript.Quit 1
-  End If
-  On Error GoTo 0
 End If
 moduleURL="https://halyardinc-my.sharepoint.com/:f:/r/personal/abel_halyard_ca/Documents/Documents/Abel/Programing/GitHub/VBA/MODULES/"
 objectURL="https://halyardinc-my.sharepoint.com/:f:/r/personal/abel_halyard_ca/Documents/Documents/Abel/Programing/GitHub/VBA/MICROSOFT_EXCEL_OBJECTS/"
