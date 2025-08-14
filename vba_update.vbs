@@ -31,14 +31,12 @@ Set fso=CreateObject("Scripting.FileSystemObject")
 For Each vbComp In wb.VBProject.VBComponents
   Select Case vbComp.Type
     Case 1
-      If vbComp.Name<>"m_update" Then
-        compName=vbComp.Name
-        filePath=modulePath & compName & ".bas"
-        If fso.FileExists(filePath) Then
-          wb.VBProject.VBComponents.Remove vbComp
-          Set vbComp=wb.VBProject.VBComponents.Import(filePath)
-          vbComp.Name=compName
-        End If
+      compName=vbComp.Name
+      filePath=modulePath & compName & ".bas"
+      If fso.FileExists(filePath) Then
+        wb.VBProject.VBComponents.Remove vbComp
+        Set vbComp=wb.VBProject.VBComponents.Import(filePath)
+        vbComp.Name=compName
       End If
     Case 100
       filePath=objectPath & vbComp.Name & ".cls"
@@ -51,11 +49,13 @@ For Each vbComp In wb.VBProject.VBComponents
   End Select
 Next
 wb.Save
+wb.Close
 xl.AutomationSecurity = 1
+Set wb = xl.Workbooks.Open(wbPath)
 xl.Visible = True
 On Error Resume Next
 xl.Run "'" & wb.Name & "'!ShowUpdateSuccess"
-On Error Resume Next
+On Error GoTo 0
 Set wb = Nothing
 Set xl = Nothing
 WScript.Quit 0
