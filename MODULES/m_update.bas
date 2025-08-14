@@ -1,5 +1,4 @@
 Public Const UPDATE_MESSAGE As String = "New version installed. See release notes for details."
-Public VBApswd As String
 Public latestVersion As Long
 
 Private Const VERSION_URL As String = _
@@ -47,8 +46,7 @@ Sub updates()
     Dim cmd As String
     cmd = """" & Environ("WINDIR") & "\System32\wscript.exe"" " & _
           """" & scriptPath & """ " & _
-          """" & ThisWorkbook.FullName & """ " & _
-          """" & VBApswd & """"
+          """" & ThisWorkbook.FullName & """"
 
     On Error GoTo ShellError
     Shell cmd, vbHide

@@ -25,32 +25,28 @@ If Err.Number <> 0 Then
   CleanUp
   WScript.Quit 1
 End If
-moduleURL="https://halyardinc-my.sharepoint.com/:f:/r/personal/abel_halyard_ca/Documents/Documents/Abel/Programing/GitHub/VBA/MODULES/"
-objectURL="https://halyardinc-my.sharepoint.com/:f:/r/personal/abel_halyard_ca/Documents/Documents/Abel/Programing/GitHub/VBA/MICROSOFT_EXCEL_OBJECTS/"
-tempFolder=CreateObject("WScript.Shell").ExpandEnvironmentStrings("%TEMP%") & "\\"
+modulePath="C:\Users\Abel\OneDrive - Halyard Inc\Documents\Abel\Programing\GitHub\VBA\MODULES\"
+objectPath="C:\Users\Abel\OneDrive - Halyard Inc\Documents\Abel\Programing\GitHub\VBA\MICROSOFT_EXCEL_OBJECTS\"
+Set fso=CreateObject("Scripting.FileSystemObject")
 For Each vbComp In wb.VBProject.VBComponents
-  fileURL=""
-  tmpFile=""
   Select Case vbComp.Type
     Case 1
       If vbComp.Name<>"m_update" Then
         compName=vbComp.Name
-        fileURL=moduleURL & compName & ".bas"
-        tmpFile=tempFolder & compName & ".bas"
-        If DownloadFile(fileURL,tmpFile) Then
+        filePath=modulePath & compName & ".bas"
+        If fso.FileExists(filePath) Then
           wb.VBProject.VBComponents.Remove vbComp
-          Set vbComp=wb.VBProject.VBComponents.Import(tmpFile)
+          Set vbComp=wb.VBProject.VBComponents.Import(filePath)
           vbComp.Name=compName
         End If
       End If
     Case 100
-      fileURL=objectURL & vbComp.Name & ".cls"
-      tmpFile=tempFolder & vbComp.Name & ".cls"
-      If DownloadFile(fileURL,tmpFile) Then
+      filePath=objectPath & vbComp.Name & ".cls"
+      If fso.FileExists(filePath) Then
         If vbComp.CodeModule.CountOfLines>0 Then
           vbComp.CodeModule.DeleteLines 1, vbComp.CodeModule.CountOfLines
         End If
-        vbComp.CodeModule.AddFromFile tmpFile
+        vbComp.CodeModule.AddFromFile filePath
       End If
   End Select
 Next
@@ -61,20 +57,3 @@ Sub CleanUp()
   If Not wb Is Nothing Then wb.Close False
   If Not xl Is Nothing Then xl.Quit
 End Sub
-Function DownloadFile(url,dest)
-  On Error Resume Next
-  Set http=CreateObject("MSXML2.XMLHTTP")
-  http.Open "GET",url,False
-  http.send
-  If http.Status=200 Then
-    Set stream=CreateObject("ADODB.Stream")
-    stream.Type=1
-    stream.Open
-    stream.Write http.responseBody
-    stream.SaveToFile dest,2
-    stream.Close
-    DownloadFile=True
-  Else
-    DownloadFile=False
-  End If
-End Function
