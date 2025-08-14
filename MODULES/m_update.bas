@@ -1,4 +1,5 @@
-Public Const UPDATE_MESSAGE As String = "New version installed. See release notes for details."
+Public Const UPDATE_MESSAGE As String = _
+    "Update successful. This release includes the latest features and bug fixes."
 Public latestVersion As Long
 
 Private Const VERSION_URL As String = _
@@ -25,12 +26,17 @@ Sub updates()
 
     updating = True
 
+    MsgBox "The application will now update and reopen with the new version.", _
+           vbInformation
+
     Dim scriptPath As String
     scriptPath = "C:\Users\Abel\OneDrive - Halyard Inc\Documents\Abel\Programing\GitHub\VBA\vba_update.vbs"
 
     If Dir(scriptPath) = "" Then
-        MsgBox "Update script not found: " & scriptPath, vbExclamation
-        Exit Sub
+        MsgBox "Update script not found: " & scriptPath & vbCrLf & _
+               "Please contact abel@halyard.ca", vbCritical
+        ThisWorkbook.Close SaveChanges:=False
+        Application.Quit
     End If
 
     ' record the version installed
@@ -56,6 +62,12 @@ Sub updates()
     Exit Sub
 
 ShellError:
-    MsgBox "Failed to run update script: " & Err.Description, vbCritical
+    MsgBox "Update failed. Please contact abel@halyard.ca", vbCritical
+    ThisWorkbook.Close SaveChanges:=False
+    Application.Quit
 
+End Sub
+
+Sub ShowUpdateSuccess()
+    MsgBox UPDATE_MESSAGE, vbInformation
 End Sub
