@@ -51,8 +51,15 @@ For Each vbComp In wb.VBProject.VBComponents
   End Select
 Next
 wb.Save
-CleanUp
-If Err.Number <> 0 Then WScript.Quit 1
+xl.AutomationSecurity = 1
+xl.Visible = True
+On Error Resume Next
+xl.Run "'" & wb.Name & "'!ShowUpdateSuccess"
+On Error Resume Next
+Set wb = Nothing
+Set xl = Nothing
+WScript.Quit 0
+
 Sub CleanUp()
   If Not wb Is Nothing Then wb.Close False
   If Not xl Is Nothing Then xl.Quit
