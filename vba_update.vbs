@@ -34,7 +34,7 @@ If Err.Number <> 0 Then
 End If
 If vbp.Protection <> 0 Then
   On Error Resume Next
-  vbp.RemovePassword vbapwd
+  vbp.Unprotect vbapwd
   If Err.Number <> 0 Then
     WScript.Echo "Failed to unlock VBProject: " & Err.Description
     CleanUp
