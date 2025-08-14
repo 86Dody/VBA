@@ -34,6 +34,8 @@ Private Sub Workbook_Open()
     Dim versionName As Name
     Dim version As Long
 
+    latestVersion = GetLatestVersion()
+
     On Error Resume Next
     Set versionName = ThisWorkbook.Names("VbaVersion")
     If Not versionName Is Nothing Then
@@ -43,7 +45,8 @@ Private Sub Workbook_Open()
     End If
     On Error GoTo 0
 
-    If version <> LATEST_VERSION Then
+    If latestVersion > 0 And version <> latestVersion Then
+        VBApswd = pswd
         updates
         Exit Sub
     End If
