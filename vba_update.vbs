@@ -25,8 +25,8 @@ If Err.Number <> 0 Then
   CleanUp
   WScript.Quit 1
 End If
-modulePath="C:\Users\Abel\OneDrive - Halyard Inc\Documents\Abel\Programing\GitHub\VBA\MODULES\"
-objectPath="C:\Users\Abel\OneDrive - Halyard Inc\Documents\Abel\Programing\GitHub\VBA\MICROSOFT_EXCEL_OBJECTS\"
+modulePath="C:\Users\Abel\OneDrive - Halyard Inc\Documents\Abel\Programing\GitHub\VBA\MEL\MODULES\"
+objectPath="C:\Users\Abel\OneDrive - Halyard Inc\Documents\Abel\Programing\GitHub\VBA\MEL\MICROSOFT_EXCEL_OBJECTS\"
 Set fso=CreateObject("Scripting.FileSystemObject")
 For Each vbComp In wb.VBProject.VBComponents
   Select Case vbComp.Type

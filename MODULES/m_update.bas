@@ -2,7 +2,7 @@ Public latestVersion As Long
 Public updateMessage As String
 
 Private Const VERSION_URL As String = _
-    "https://halyardinc-my.sharepoint.com/:u:/r/personal/abel_halyard_ca/Documents/Documents/Abel/Programing/GitHub/VBA/latest_version.txt"
+    "https://halyardinc-my.sharepoint.com/:u:/r/personal/abel_halyard_ca/Documents/Documents/Abel/Programing/GitHub/VBA/MEL/latest_version.txt"
 
 Public Function GetLatestVersion() As Long
     On Error GoTo errHandler
@@ -51,7 +51,7 @@ Sub updates()
     updating = True
 
     Dim scriptPath As String
-    scriptPath = "C:\Users\Abel\OneDrive - Halyard Inc\Documents\Abel\Programing\GitHub\VBA\vba_update.vbs"
+    scriptPath = "C:\Users\Abel\OneDrive - Halyard Inc\Documents\Abel\Programing\GitHub\VBA\MEL\vba_update.vbs"
 
     If Dir(scriptPath) = "" Then
         MsgBox "Update script not found: " & scriptPath & vbCrLf & _
