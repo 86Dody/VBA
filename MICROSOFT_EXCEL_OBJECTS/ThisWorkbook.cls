@@ -46,7 +46,6 @@ Private Sub Workbook_Open()
     On Error GoTo 0
 
     If latestVersion > 0 And version <> latestVersion Then
-        VBApswd = pswd
         updates
         Exit Sub
     End If
