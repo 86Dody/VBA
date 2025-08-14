@@ -1,6 +1,9 @@
-5
+7
 ##UPDATES:##
 Update successful. This release includes the latest features and bug fixes.
+ * Mejora
+  * Se reduce
+  * Se acelera
 ##END##
 
 
