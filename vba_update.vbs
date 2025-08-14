@@ -1,5 +1,11 @@
+Set args = WScript.Arguments
+If args.Count = 0 Then
+  WScript.Echo "Workbook path argument is required."
+  WScript.Quit 1
+End If
+wbPath = args(0)
+vbapwd = "OedPP8Ag**"
 If args.Count > 1 Then vbapwd = args(1)
-
 On Error Resume Next
 Set xl = CreateObject("Excel.Application")
 If Err.Number <> 0 Then
@@ -23,6 +29,7 @@ If Err.Number <> 0 Then
 End If
 If vbp.Protection <> 0 Then
   On Error Resume Next
+  vbp.RemovePassword vbapwd
   vbp.Unprotect vbapwd
   If Err.Number <> 0 Then
     WScript.Echo "Failed to unlock VBProject: " & Err.Description
@@ -49,3 +56,38 @@ For Each vbComp In wb.VBProject.VBComponents
           vbComp.Name=compName
         End If
       End If
+    Case 100
+      fileURL=objectURL & vbComp.Name & ".cls"
+      tmpFile=tempFolder & vbComp.Name & ".cls"
+      If DownloadFile(fileURL,tmpFile) Then
+        If vbComp.CodeModule.CountOfLines>0 Then
+          vbComp.CodeModule.DeleteLines 1, vbComp.CodeModule.CountOfLines
+        End If
+        vbComp.CodeModule.AddFromFile tmpFile
+      End If
+  End Select
+Next
+wb.Save
+CleanUp
+If Err.Number <> 0 Then WScript.Quit 1
+Sub CleanUp()
+  If Not wb Is Nothing Then wb.Close False
+  If Not xl Is Nothing Then xl.Quit
+End Sub
+Function DownloadFile(url,dest)
+  On Error Resume Next
+  Set http=CreateObject("MSXML2.XMLHTTP")
+  http.Open "GET",url,False
+  http.send
+  If http.Status=200 Then
+    Set stream=CreateObject("ADODB.Stream")
+    stream.Type=1
+    stream.Open
+    stream.Write http.responseBody
+    stream.SaveToFile dest,2
+    stream.Close
+    DownloadFile=True
+  Else
+    DownloadFile=False
+  End If
+End Function
