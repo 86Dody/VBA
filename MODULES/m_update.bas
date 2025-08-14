@@ -1,5 +1,5 @@
 Public Const UPDATE_MESSAGE As String = "New version installed. See release notes for details."
-Public Const LATEST_VERSION As Long = 
+Public Const LATEST_VERSION As Long = 1
 Public VBApswd As String
 
 ' Launch an external VBScript that updates the VBA project while Excel is closed.
