@@ -11,11 +11,24 @@ wbPath = args(0)
 vbapwd = ""
 If args.Count > 1 Then vbapwd = args(1)
 
+On Error Resume Next
 Set xl = CreateObject("Excel.Application")
+If Err.Number <> 0 Then
+  WScript.Echo "Could not start Excel: " & Err.Description
+  GoTo CleanUp
+End If
 xl.Visible = False
 xl.AutomationSecurity = 3
 Set wb = xl.Workbooks.Open(wbPath)
+If Err.Number <> 0 Then
+  WScript.Echo "Could not open workbook: " & Err.Description
+  GoTo CleanUp
+End If
 Set vbp = wb.VBProject
+If Err.Number <> 0 Then
+  WScript.Echo "Could not access VBProject: " & Err.Description
+  GoTo CleanUp
+End If
 If vbp.Protection <> 0 Then
   xl.VBE.MainWindow.Visible = True
   vbp.VBE.CommandBars("Menu Bar").Controls("Tools").Controls("VBAProject Properties...").Execute
@@ -52,8 +65,11 @@ For Each vbComp In wb.VBProject.VBComponents
   End Select
 Next
 wb.Save
-wb.Close False
-xl.Quit
+
+CleanUp:
+If Not wb Is Nothing Then wb.Close False
+If Not xl Is Nothing Then xl.Quit
+If Err.Number <> 0 Then WScript.Quit 1
 
 Function DownloadFile(url,dest)
   On Error Resume Next
