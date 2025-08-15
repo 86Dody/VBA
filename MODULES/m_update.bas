@@ -4,6 +4,10 @@ Public updateMessage As String
 Private Const VERSION_URL As String = _
     "https://halyardinc-my.sharepoint.com/:u:/r/personal/abel_halyard_ca/Documents/Documents/Abel/Programing/GitHub/VBA/MEL/latest_version.txt"
 
+Private Const LOCK_FILE As String = "update.lock"
+Private Const SCRIPT_URL As String = _
+    "https://halyardinc-my.sharepoint.com/:u:/r/personal/abel_halyard_ca/Documents/Documents/Abel/Programing/GitHub/VBA/MEL/vba_update.vbs"
+
 Public Function GetLatestVersion() As Long
     On Error GoTo errHandler
     Dim http As Object
@@ -49,16 +53,25 @@ Sub updates()
 
 
     updating = True
-
     Dim scriptPath As String
-    scriptPath = "C:\Users\Abel\OneDrive - Halyard Inc\Documents\Abel\Programing\GitHub\VBA\MEL\vba_update.vbs"
+    scriptPath = Environ("TEMP") & "\vba_update.vbs"
 
-    If Dir(scriptPath) = "" Then
-        MsgBox "Update script not found: " & scriptPath & vbCrLf & _
+    Dim http As Object, stream As Object
+    Set http = CreateObject("MSXML2.XMLHTTP")
+    http.Open "GET", SCRIPT_URL, False
+    http.send
+    If http.Status <> 200 Then
+        MsgBox "Update script not found: " & SCRIPT_URL & vbCrLf & _
                "Please contact abel@halyard.ca", vbCritical
         ThisWorkbook.Close SaveChanges:=False
         Application.Quit
     End If
+    Set stream = CreateObject("ADODB.Stream")
+    stream.Type = 1
+    stream.Open
+    stream.Write http.responseBody
+    stream.SaveToFile scriptPath, 2
+    stream.Close
 
     ' record the version installed
     If latestVersion = 0 Then latestVersion = GetLatestVersion()
@@ -91,4 +104,34 @@ End Sub
 
 Sub ShowUpdateSuccess()
     MsgBox updateMessage, vbInformation
+    SaveSetting "MELWorkbook", "Update", "ShownVersion", latestVersion
+End Sub
+
+Public Function IsUpdatingInProgress() As Boolean
+    Dim lockPath As String
+    lockPath = ThisWorkbook.Path & "\" & LOCK_FILE
+    IsUpdatingInProgress = (Dir(lockPath) <> "")
+End Function
+
+Public Function IsOnlyUser() As Boolean
+    Dim users As Variant
+    Dim count As Long
+    On Error Resume Next
+    users = ThisWorkbook.UserStatus
+    On Error GoTo 0
+    If IsArray(users) Then
+        count = UBound(users) - LBound(users) + 1
+        IsOnlyUser = (count <= 1)
+    Else
+        IsOnlyUser = True
+    End If
+End Function
+
+Public Sub ShowUpdateInfoOnce()
+    Dim seenVersion As Long
+    seenVersion = CLng(GetSetting("MELWorkbook", "Update", "ShownVersion", 0))
+    If latestVersion > seenVersion And updateMessage <> "" Then
+        MsgBox updateMessage, vbInformation
+        SaveSetting "MELWorkbook", "Update", "ShownVersion", latestVersion
+    End If
 End Sub
