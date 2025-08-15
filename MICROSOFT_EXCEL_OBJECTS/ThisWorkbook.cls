@@ -34,6 +34,12 @@ Private Sub Workbook_Open()
     Dim versionName As Name
     Dim version As Long
 
+    If IsUpdatingInProgress() Then
+        MsgBox "The workbook is currently being updated. Please try again later.", vbExclamation
+        ThisWorkbook.Close SaveChanges:=False
+        Application.Quit
+    End If
+
     latestVersion = GetLatestVersion()
 
     On Error Resume Next
@@ -46,14 +52,20 @@ Private Sub Workbook_Open()
     On Error GoTo 0
 
     If latestVersion > 0 And latestVersion > version Then
-        MsgBox "A new version (" & latestVersion & ") is available. " & _
-               "The workbook will close and reopen with the update.", vbInformation
-        updates
-        Exit Sub
+        If IsOnlyUser() Then
+            MsgBox "A new version (" & latestVersion & ") is available. " & _
+                   "The workbook will close and reopen with the update.", vbInformation
+            updates
+            Exit Sub
+        Else
+            MsgBox "A new version (" & latestVersion & ") is available and will be installed " & _
+                   "when all other users close the workbook.", vbInformation
+        End If
     End If
 
     Call SelectLockedCells
     Call start
+    ShowUpdateInfoOnce
 
 'HOLA-HOLA-HOLA-HOLA
 
