@@ -108,8 +108,16 @@ Sub ShowUpdateSuccess()
 End Sub
 
 Public Function IsUpdatingInProgress() As Boolean
+    Dim folderPath As String
     Dim lockPath As String
-    lockPath = ThisWorkbook.Path & "\" & LOCK_FILE
+
+    folderPath = ThisWorkbook.Path
+    If folderPath = "" Or Left(folderPath, 4) = "http" Then
+        IsUpdatingInProgress = False
+        Exit Function
+    End If
+
+    lockPath = folderPath & "\" & LOCK_FILE
     IsUpdatingInProgress = (Dir(lockPath) <> "")
 End Function
 

@@ -5,13 +5,26 @@ If args.Count = 0 Then
 End If
 wbPath = args(0)
 Set fso = CreateObject("Scripting.FileSystemObject")
+lockPath = ""
+On Error Resume Next
 lockPath = fso.GetParentFolderName(wbPath) & "\\update.lock"
-If fso.FileExists(lockPath) Then
-  WScript.Echo "Update already in progress."
-  WScript.Quit 1
+If Err.Number = 0 Then
+  If fso.FileExists(lockPath) Then
+    WScript.Echo "Update already in progress."
+    WScript.Quit 1
+  End If
+  Set lockFile = fso.CreateTextFile(lockPath, True)
+  If Err.Number = 0 Then
+    lockFile.Close
+  Else
+    lockPath = ""
+    Err.Clear
+  End If
+Else
+  lockPath = ""
+  Err.Clear
 End If
-Set lockFile = fso.CreateTextFile(lockPath, True)
-lockFile.Close
+On Error GoTo 0
 moduleBase = "https://halyardinc-my.sharepoint.com/:u:/r/personal/abel_halyard_ca/Documents/Documents/Abel/Programing/GitHub/VBA/MEL/MODULES/"
 objectBase = "https://halyardinc-my.sharepoint.com/:u:/r/personal/abel_halyard_ca/Documents/Documents/Abel/Programing/GitHub/VBA/MEL/MICROSOFT_EXCEL_OBJECTS/"
 tempPath = fso.BuildPath(fso.GetSpecialFolder(2), "vba_update")
@@ -69,7 +82,9 @@ xl.Run "'" & wb.Name & "'!ShowUpdateSuccess"
 On Error GoTo 0
 Set wb = Nothing
 Set xl = Nothing
-If fso.FileExists(lockPath) Then fso.DeleteFile lockPath
+If lockPath <> "" Then
+  If fso.FileExists(lockPath) Then fso.DeleteFile lockPath
+End If
 WScript.Quit 0
 
 Sub CleanUp()
